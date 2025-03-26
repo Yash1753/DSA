@@ -4,14 +4,15 @@ public:
         int n  = a.size();
         int d = 1,load = 0;
         for(int i =0 ; i<n ; i++){
-            if (load + a[i] > mid) {
+            load += a[i];
+            if (load > mid) {
             d+= 1; //move to next day
             load = a[i]; //load the weight.
         }
-        else {
+       
             //load the weight on the same day.
-            load += a[i];
-        }
+            
+        
         }
 
         
