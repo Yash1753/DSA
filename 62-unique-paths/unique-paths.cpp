@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int helper( vector<vector<int>>&dp, int i, int j){
+        if(i == 0 && j == 0) return 1;
+        if(i<0 || j <0) return 0;
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int up = helper(dp,i-1,j);
+        int right = helper(dp,i,j-1);
+
+        dp[i][j] = up+ right;
+
+        return up + right;
+
+
+    }
+
+    int uniquePaths(int m, int n) {
+         vector<vector<int>> dp(m, vector<int> (n, -1));
+         return helper(dp,m-1,n-1);
+
+    }
+};
