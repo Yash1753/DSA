@@ -21,7 +21,10 @@ public:
 
 private:
     bool DFS( unordered_map<int,vector<int>> &adj,int u,  vector<int>&color, int CC ){
+         if (color[u] != -1)                        // already colored? must match
+            return color[u] == CC;
         color[u] = CC;
+        
 
         for(int &v : adj[u]){
             if(color[v] == color[u]) return false;
