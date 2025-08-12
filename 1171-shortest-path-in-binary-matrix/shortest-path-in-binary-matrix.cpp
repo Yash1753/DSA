@@ -27,7 +27,7 @@ public:
 
                 if(x == m-1 && y==n-1) return level+1;
 
-                for(auto dir : directions){
+                for(auto &dir : directions){
                     int x_ = x + dir[0];
                     int y_ = y + dir[1];
 
