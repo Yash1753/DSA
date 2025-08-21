@@ -33,7 +33,7 @@ public:
         Parent.resize(n);
         Rank.resize(n,0);
 
-        unordered_map<int,vector<int>> adj;
+        //unordered_map<int,vector<int>> adj;
        /*  for(auto &edge : stones){
             int u = edge[0];
             int v = edge[1];
