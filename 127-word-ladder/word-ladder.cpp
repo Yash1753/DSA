@@ -19,7 +19,7 @@ public:
 
                 if(top == endWord) return level;
 
-                for(auto ch : check){
+                for(auto &ch : check){
                     for(int i = 0 ; i < top.size() ; i++){
                         string tf = top;
                         tf[i] = ch;
