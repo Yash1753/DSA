@@ -25,7 +25,7 @@ public:
         for (int i = 0; i < n; ++i) {
             if (d1[i] == INT_MAX || d2[i] == INT_MAX) continue;  // unreachable by one side
             int cur = max(d1[i], d2[i]);
-            if (cur < bestMaxDist || (cur == bestMaxDist && i < bestNode)) {
+            if (cur < bestMaxDist ) {
                 bestMaxDist = cur;
                 bestNode = i;
             }
