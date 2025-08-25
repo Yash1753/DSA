@@ -1,6 +1,6 @@
 class Solution {
 public:
-    double prob;
+   
 
     /* void DFS(unordered_map<int,vector<pair<int,double>>> &adj, double curr, int u, int dest, vector<bool>&visited){
         if(visited[u]) return;
@@ -36,8 +36,6 @@ public:
             adj[u].push_back({v,succProb[i]});
             adj[v].push_back({u,succProb[i]});
         }
-        prob = 0;
-
         //0 se 1 aur uski prob
         priority_queue<P>pq;
         pq.push({1.0,start_node});
