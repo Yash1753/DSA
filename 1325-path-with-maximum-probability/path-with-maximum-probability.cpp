@@ -47,6 +47,8 @@ public:
             double w = top.first;
             int u = top.second;
 
+            if(u == end_node) return w;
+
             for(auto &vec : adj[u]){
                 double curr = vec.second;
                 int v = vec.first;
