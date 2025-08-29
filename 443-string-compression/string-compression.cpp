@@ -1,41 +1,49 @@
 class Solution {
 public:
     int compress(vector<char>& chars) {
-        //2pointer rkhte h // index update k kaam aayega
-        int index = 0;
-        int prev = chars[0];
-        int cnt = 1;
-
-        for(int i = 1 ; i< chars.size() ; i++){
-            if(prev == chars[i]){
+        int n = chars.size();
+        int i = 0;
+        int j = 0;
+        int cnt = 0;
+        string s = "";
+        s+= chars[0];
+        while(j < n){
+            if(chars[i] == chars[j]){
                 cnt++;
-            }
-            else{
-                chars[index] = prev;
-                index++;
+            }else{
                 if(cnt > 1){
-                    int start = index;
+                    string t = "";
                     while(cnt){
-                        chars[index++] = cnt%10 +'0';
-                        cnt /=10;
+                        t+= to_string(cnt%10);
+                        cnt = cnt/10;
+                        
                     }
-                    reverse(chars.begin() + start , chars.begin() + index);
+                    reverse(t.begin(), t.end());
+                    s+=t;
                 }
-                prev= chars[i];
+                
+                s+= chars[j];
                 cnt = 1;
+                i = j;
             }
+            j++;
         }
-        chars[index++] = prev;
-        if(cnt > 1){
-            int start = index;
-                while(cnt){
-                    chars[index++] = cnt%10 +'0';
-                    cnt /=10;
+       if(cnt > 1){
+                    string t = "";
+                    while(cnt){
+                        t+= to_string(cnt%10);
+                        cnt = cnt/10;
+                        
+                    }
+                    reverse(t.begin(), t.end());
+                    s+=t;
                 }
-            reverse(chars.begin() + start , chars.begin() + index);
+
+        for(int i = 0 ; i < s.length() ; i++ ){
+            char ch = s[i];
+            chars[i] = ch;
+            
         }
-        return index;
-
-
+        return s.size();
     }
 };
