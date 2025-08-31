@@ -30,7 +30,7 @@ public:
             if(front->right)q.push(front->right);
         }
         ans.push_back(temp);
-        temp.clear();
+        
     }
     return ans;
     }
