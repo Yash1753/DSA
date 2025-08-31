@@ -11,20 +11,19 @@
  */
 class Solution {
 public:
-    int maxi = INT_MIN;
+    int maxSum = INT_MIN;
+    int solve(TreeNode * root){
+        if(!root) return  0;
+        int lh = max(solve(root->left),0); // negative path ko negl;ect krdege
+        int rh = max(solve(root->right),0);
 
-    int height(TreeNode * root){
-        if(!root) return 0;
-        int lh = max(height(root->left),0);
-        int rh = max(height(root->right),0);
-
-        maxi = max(maxi, lh+rh+root->val);
-
+        maxSum = max(maxSum, lh+rh+root->val);
         return max(lh,rh) + root->val;
     }
 
     int maxPathSum(TreeNode* root) {
-        height(root);
-        return maxi;
+     if(!root) return 0;
+     solve(root);
+     return maxSum;   
     }
 };
