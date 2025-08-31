@@ -12,41 +12,41 @@
 class Solution {
 public:
     vector<vector<int>> verticalTraversal(TreeNode* root) {
-        //queue
-        queue<pair<TreeNode*, pair<int,int>>> q;
-        //ans store
         vector<vector<int>>ans;
-        //ek map col,row,node k liye
 
-        map<int, map<int,multiset<int>>> mp;
+        if(!root) return {};
+        map<int, map<int,multiset<int>>> mp; //hdistance -> nodes at that point //level lena pdega guru to maintain indexing
+
+        queue<pair<TreeNode*,pair<int,int>>>q; //node -> uska horizaNTAL distance
 
         q.push({root,{0,0}});
-        while(!q.empty()){
-            auto front  = q.front();
-            q.pop();
-            TreeNode* node = front.first;
-            auto coordinate = front.second;
-            auto &row = coordinate.first;
-            auto& col = coordinate.second;
-            mp[col][row] .insert(node->val);
-            if(node->left)q.push({node->left,{row+1,col-1}});
-            if(node->right)q.push({node->right,{row+1,col+1}});
 
+        while(!q.empty()){
+            auto front = q.front();
+            q.pop();
+            TreeNode * node = front.first;
+            int hd = front.second.first;
+            int lvl = front.second.second;
+
+
+            mp[hd][lvl].insert(node->val);
+
+            if(node->left) q.push({node->left , {hd-1,lvl+1}});
+            if(node->right) q.push({node->right , {hd+1,lvl+1}});
         }
 
-        //store
         for(auto it : mp){
             vector<int>temp;
-            auto &colMap = it.second;
-            for(auto colMapit : colMap){
-                auto& Mset = colMapit.second;
-                temp.insert(temp.end(), Mset.begin(), Mset.end());
+            for(auto i : it.second){
+               for(auto k : i.second){
+                temp.push_back(k);
+               }
             }
-
             ans.push_back(temp);
         }
 
-
         return ans;
+
+
     }
 };
