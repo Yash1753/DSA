@@ -8,68 +8,59 @@
  * };
  */
 class Solution {
-
 public:
-
-    void markParent(TreeNode*root, unordered_map<TreeNode*,TreeNode*> &track_parent){
+    void populate(TreeNode* root,unordered_map<int,vector<int>>&adj, int parent ){
         if(!root) return;
-        queue<TreeNode*>q;
-        q.push(root);
-        while(!q.empty()){
-            auto front = q.front();
-            q.pop();
-            if(front->left){
-                track_parent[front->left] = front;
-                q.push(front->left);
-            } 
-            if(front->right){
-                track_parent[front->right] = front;
-                q.push(front->right);
-            } 
+
+        if(parent != -1) adj[root->val].push_back(parent);
+        if(root->left){
+            adj[root->val].push_back(root->left->val);
         }
+        if(root->right){
+            adj[root->val].push_back(root->right->val);
+        }
+
+        if(root->left)populate(root->left, adj ,root->val);
+        if(root->right)populate(root->right, adj ,root->val);
+
     }
 
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<TreeNode*,TreeNode*>track_parent;
-        markParent(root,track_parent);
+    void dfs(unordered_map<int,vector<int>>&adj,int target, int k, vector<int>&ans, vector<int>&v,int cnt){
+        v[target] = 1;
 
-        queue<TreeNode*>q;
-        unordered_map<TreeNode*,bool>visited;
-        q.push(target);
-        visited[target] = true;
-        int cnt = 0;
+        if(cnt == k){
+            ans.push_back(target);
+            return;
+        }
 
-        while(!q.empty()){
-            int size = q.size();
-            if(cnt++ == k) break;
-            for(int i = 0 ; i <size; i++){
-                auto front = q.front();
-                q.pop();
-                if(front->left && !visited[front->left]){
-                    visited[front->left] = true;
-                    q.push(front->left);
-                }
+        for(auto &node: adj[target]){
+            if(v[node] == -1){
+                v[node] = 1;
+                
+                dfs(adj,node,k,ans,v,cnt+1);
 
-                if(front->right && !visited[front->right]){
-                    visited[front->right] = true;
-                    q.push(front->right);
-                }
-
-                if(track_parent[front] && !visited[track_parent[front]]){
-                    visited[track_parent[front]] = true;
-                    q.push(track_parent[front]);
-                }
             }
         }
 
+        
+
+    }
+
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        unordered_map<int,vector<int>>adj;
+        if(!root) return {};
         vector<int>ans;
+        populate(root,adj,-1);
+       /*  for(auto it : adj){
+            for(auto i : it.second){
+                cout << it.first << "->" << i << " ";
+            }
+            cout << endl;
+        } */
 
-        while(!q.empty()){
-            auto it = q.front();
-            q.pop();
-            ans.push_back(it->val);
-        }
-
+        //populate hoigya shi
+        vector<int>visited(501,-1);
+        dfs(adj,target->val,k,ans,visited,0);
         return ans;
     }
 };
