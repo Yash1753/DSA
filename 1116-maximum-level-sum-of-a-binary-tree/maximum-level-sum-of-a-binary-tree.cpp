@@ -10,40 +10,47 @@
  * };
  */
 class Solution {
-public:
+public://best level and curr level use krega to make it even better
     int maxLevelSum(TreeNode* root) {
         if(!root->left && !root->right) return 1;
 
-        queue<pair<TreeNode*,int>>q;
+        queue<TreeNode*>q;
         vector<int>ans;
         int lv = 1;
-        q.push({root,1});
+        int tot = INT_MIN;
+        q.push(root);
+        int bstlvl =1 ;
 
         while(!q.empty()){
             int N = q.size();
             int sum = 0;
             while(N--){
-                auto top = q.front();
+                auto node = q.front();
                 q.pop();
-                auto node = top.first;
-                auto level = top.second;
                 sum += node->val;
-                if(node->left)q.push({node->left, level+1});
-                if(node->right)q.push({node->right, level+1});
+                if(node->left)q.push(node->left);
+                if(node->right)q.push(node->right);
             }
 
-            ans.push_back(sum);
+            if(tot < sum){
+                tot = sum;
+                bstlvl = lv;
+                //if(q.empty())lv = q.front().second ;
+            }
+            lv++;
         }
+        
 
-        int maxi = *max_element(ans.begin(), ans.end());
+
+      /*   int maxi = *max_element(ans.begin(), ans.end());
 
         for(int i = 0 ; i < ans.size() ; i++){
             if(ans[i] == maxi){
                 lv = i;
                 break;
             }
-        }
-        return lv+1;
+        } */
+        return bstlvl;
 
     }
 };
