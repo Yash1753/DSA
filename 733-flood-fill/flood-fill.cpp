@@ -1,48 +1,37 @@
 class Solution {
 public:
 
-    vector<vector<int>>directions{{-1,0},{0,-1},{1,0},{0,1}};
-    typedef pair<int,int>P ;
+    //start krna image[sr][sc]p and change color har adj p same jkaam krna 
+    //directions bna lege 
+    vector<vector<int>>directions{{1,0},{0,1},{-1,0},{0,-1}};
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
         int m  = image.size();
         int n  = image[0].size();
-
-        //img[i][i] == pixel vel,, sr,sc
-
-        vector<vector<int>> result(m, vector<int>(n,-1));
-        queue<P>q;
-        q.push({sr,sc});
-        result[sr][sc] = color;
-
+        if(image[sr][sc] == color) return image;
+        queue<pair<int,int>>q; // colr - >coordinates
+        q.push( {sr,sc});
+        int orig  = image[sr][sc];
+        vector<vector<int>> res(image.begin(),image.end());
+        res[sr][sc] = color;
         while(!q.empty()){
-            auto top = q.front();
-            q.pop();
+            auto top = q.front();q.pop();
+            
+            int x = top.first;
+            int y = top.second;
 
-            int i = top.first;
-            int j = top.second;
+            for(auto &dir : directions){
+                int x_ = x+dir[0];
+                int y_ = y+dir[1];
 
-            for(auto &dir: directions){
-                int new_i = i+dir[0];
-                int new_j = j+dir[1];
-
-                if(new_i >=0 && new_i < m && new_j >= 0 && new_j < n && image[new_i][new_j] == image[i][j] && result[new_i][new_j] == -1){
-                    result[new_i][new_j] = color;
-                    q.push({new_i,new_j});
+                if(x_ >= 0 && x_ < m && y_ >= 0 && y_ < n && image[x_][y_] == orig && res[x_][y_] != color){
+                    res[x_][y_] = color;
+                    //image[x][y]= -1;
+                    q.push({x_,y_});
                 }
             }
 
         }
 
-        for(int i = 0 ; i < m ; i++){
-            for(int j = 0 ; j < n ; j++){
-                if(result[i][j] == -1){
-                    result[i][j] = image[i][j];
-                }
-            }
-        }
-        return result;
-
-
-
+        return res;
     }
 };
