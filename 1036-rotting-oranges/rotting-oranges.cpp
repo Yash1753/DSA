@@ -1,55 +1,56 @@
 class Solution {
 public:
-    typedef pair<int,int> P;
-    vector<vector<int>> directions{{-1,0},{0,-1},{1,0},{0,1}};
     int orangesRotting(vector<vector<int>>& grid) {
-        queue<P>q;
-        int n = grid.size();
-        int m = grid[0].size();
+        //classic bfs based 
+        //multisource as ek tuime p chl rhe
+        vector<vector<int>>directions{{-1,0},{0,-1},{1,0},{0,1}};
 
-        int fresh = 0;
+        //0 is empty
+        //1 is fresh
+        //2 is rotten
 
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < m ; j++){
+        int m = grid.size();
+        int n = grid[0].size();
+
+        int time = 0;
+        int freshOranges = 0;
+        queue<pair<int,int>> q;
+        //inset staring points in q
+        for(int i = 0 ; i < m ; i++){
+            for(int j = 0 ; j < n ; j++){
                 if(grid[i][j] == 2){
                     q.push({i,j});
                 }else if(grid[i][j] == 1){
-                    fresh++;
+                    freshOranges++;
                 }
             }
         }
 
-        if(fresh == 0) return 0;
-        int minute = 0;
-
+        //lets traverse
         while(!q.empty()){
+            //min wise h level order
             int N = q.size();
             while(N--){
-                auto top = q.front();
-                q.pop();
-                int i = top.first;
-                int j = top.second;
+                auto front = q.front();q.pop();
+                int x = front.first;
+                int y = front.second;
 
                 for(auto &dir : directions){
-                    int new_i = i + dir[0];
-                    int new_j = j + dir[1];
+                    int nx = x + dir[0];
+                    int ny = y + dir[1];
 
-                    if(new_i >=0 && new_i < n && new_j >=0 && new_j<m && grid[new_i][new_j] == 1){
-                        q.push({new_i,new_j});
-                        grid[new_i][new_j] = 2;
-                        fresh--;
+                    if(nx >= 0 && nx < m && ny >=0 && ny < n && grid[nx][ny] == 1){
+                        freshOranges--;
+                        grid[nx][ny] = 2;
+                        q.push({nx,ny});
                     }
                 }
-
             }
-
-            minute++;
+            time++;
         }
 
-        if(fresh == 0){
-            return minute-1;
-        }
-
+        if(freshOranges == 0) return time > 0 ?time-1:0;
         return -1;
+
     }
 };
