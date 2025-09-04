@@ -1,29 +1,29 @@
 class Solution {
 public:
-    bool helper(vector<int>&a,int limit,int mid){
-        int  n = a.size();
-        int total = 0;
-        for(int i = 0; i < n ; i++){
-            total += ceil((double)a[i]/(double)mid);
+    bool isValid(vector<int>&nums, int k, int m){
+        int sum = 0;
+        for(auto &num : nums){
+            sum += ceil((double)num/(double)m);
+          
         }
-
-        if(total <= limit) return true;
+        if(sum <= k) return true;
         return false;
     }
 
     int smallestDivisor(vector<int>& nums, int threshold) {
-        int low = 1;
-        int high = *max_element(nums.begin(),nums.end());
-        int ans = 1;
-        while(low <= high){
-            int mid = (low+high)/2;
-            if(helper(nums,threshold,mid)){
-                ans = mid;
-                high = mid-1;
+        int l = 1;
+        int r = *max_element(nums.begin(),nums.end());
+        int num = 1;
+        while(l<=r){
+            int m = (l+r)/2;
+
+            if(isValid(nums,threshold,m)){
+                num = m;
+                r = m-1;
             }else{
-                low= mid+1;
+                l = m+1;
             }
         }
-        return ans;
+        return num;
     }
 };
