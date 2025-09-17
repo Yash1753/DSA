@@ -1,26 +1,26 @@
 class Solution {
 public:
+    int longestPalindromeSubseq(string s) {
+        int n = s.size();
+        int maxLen = 0;
+        int curr = -1;
 
-    int LCS(int i , int j ,string &s, string &r, vector<vector<int>>&dp){
-        if( i <0 || j <0) return 0;
+        vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+   for (int i = 0; i < n; ++i) dp[i][i] = 1;
 
-
-        if(dp[i][j] != -1) return dp[i][j];  
-        //matching case likh
-        if(s[i] == r[j]){
-            dp[i][j] = 1+ LCS(i-1,j-1, s, r,dp);
-        }else{
-            dp[i][j] = max(LCS(i-1,j,s,r,dp), LCS(i,j-1,s,r,dp));
+        // L = current substring length
+        for (int L = 2; L <= n; ++L) {
+            for (int i = 0; i + L - 1 < n; ++i) {
+                int j = i + L - 1;
+                if (s[i] == s[j]) {
+                    if (L == 2) dp[i][j] = 2;            // two equal chars
+                    else dp[i][j] = 2 + dp[i+1][j-1];   // enclosure + inner
+                } else {
+                    dp[i][j] = max(dp[i+1][j], dp[i][j-1]);
+                }
+            }
         }
 
-        return dp[i][j];
-    }
-    int longestPalindromeSubseq(string s) {
-        string r = s;
-        reverse(r.begin(), r.end());
-        int n = s.length();
-        vector<vector<int>> dp (n ,vector<int>(n,-1));
-        return LCS(n-1,n-1, s, r, dp);
-
+        return dp[0][n-1];
     }
 };
