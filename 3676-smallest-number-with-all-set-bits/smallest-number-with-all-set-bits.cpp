@@ -1,11 +1,8 @@
 class Solution {
 public:
     int smallestNumber(int n) {
-        int res = 1;
+       int bits = log2(n)+1;
 
-        while(res < n){
-            res = res*2 +1;
-        }
-        return res;
+       return pow(2,bits) -1;
     }
 };
