@@ -67,9 +67,9 @@ void Union(int x, int y){
         }
  */
     unordered_set<int>s;
-    for (int i = 0; i < n; ++i) {
-            s.insert(find(i)); // ensure we insert canonical roots
-        }
+    for(auto &v : parent){
+        s.insert(find(v));
+    }
 
 
         return s.size();
