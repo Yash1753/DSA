@@ -36,16 +36,14 @@ vector<int>Parent;
         for(auto &it : connections){
             int a = it[0];
             int b = it[1];
-
-            int Pa = find(a);
-            int Pb = find(b);
-
-            if(Pa != Pb){
-                Union(a,b);
-                components--;
-            }
+            Union(a,b);
+            
+            
         }
-
-        return components-1;
+        unordered_set<int>s;
+        for(auto &v : Parent){
+            s.insert(find(v));
+        }
+        return s.size()-1;
     }
 };
