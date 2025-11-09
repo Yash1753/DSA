@@ -4,32 +4,31 @@ public:
     int n;
     //fidning diameter basically kehta ki farther from farther is diameter
 
-    pair<int,int> farther(int i, unordered_map<int,vector<int>>&adj){
-        //yaha se fartherest niode, diatance milega
-        //bfs se implement krtye h
+    pair<int,int> farther(int i,unordered_map<int,vector<int>>&adj ){
+        //yaha se distance and farther chaiye let uise bfs
+
         queue<int>q;
         q.push(i);
-        unordered_map<int,bool>visited;
-        visited[i] = true;
-        int cnt = 0;
-        int far = i;
+        unordered_map<int,bool>vis;
+        vis[i] =1;
+        int dist =0;
+        int farther = i;
         while(!q.empty()){
+            //level nikalna h distance k liye
             int size = q.size();
             while(size--){
-                int node = q.front();
-                q.pop();
-                far = node;
-                for(auto &v : adj[node]){
-                    if(!visited[v]){
+                int node = q.front();q.pop();
+                farther = node;
+                for(int &v : adj[node]){
+                    if(!vis[v]){
+                        vis[v] = true;
                         q.push(v);
-                        visited[v] = true;
                     }
                 }
-            }
-            if(!q.empty()) cnt++;
+            }if(!q.empty()) dist++;
         }
 
-        return {far,cnt};
+        return {farther,dist};
     }
 
     int findD(unordered_map<int,vector<int>>&adj){
