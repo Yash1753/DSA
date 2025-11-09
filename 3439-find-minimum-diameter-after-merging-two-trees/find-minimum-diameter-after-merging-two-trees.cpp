@@ -1,53 +1,68 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
-    // Return {farthest_node, distance} from a given start using DFS on a tree
-    pair<int,int> farthest(int u, int parent, const vector<vector<int>>& adj) {
-        pair<int,int> best = {u, 0};
-        for (int v : adj[u]) {
-            if (v == parent) continue;
-            auto got = farthest(v, u, adj);
-            if (got.second + 1 > best.second) {
-                best = {got.first, got.second + 1};
+
+    int n;
+    //fidning diameter basically kehta ki farther from farther is diameter
+
+    pair<int,int> farther(int i, unordered_map<int,vector<int>>&adj){
+        //yaha se fartherest niode, diatance milega
+        //bfs se implement krtye h
+        queue<int>q;
+        q.push(i);
+        unordered_map<int,bool>visited;
+        visited[i] = true;
+        int cnt = 0;
+        int far = i;
+        while(!q.empty()){
+            int size = q.size();
+            while(size--){
+                int node = q.front();
+                q.pop();
+                far = node;
+                for(auto &v : adj[node]){
+                    if(!visited[v]){
+                        q.push(v);
+                        visited[v] = true;
+                    }
+                }
             }
+            if(!q.empty()) cnt++;
         }
-        return best;
+
+        return {far,cnt};
     }
 
-    // Diameter of a tree given its adjacency
-    int treeDiameter(const vector<vector<int>>& adj) {
-        if (adj.empty()) return 0;                  // single node (no edges)
-        auto a = farthest(0, -1, adj);              // farthest from 0
-        auto b = farthest(a.first, -1, adj);        // farthest from a
-        return b.second;                             // number of edges on the longest path
+    int findD(unordered_map<int,vector<int>>&adj){
+        //find dist from farther n all
+        if(adj.size() == 0) return 0;
+        auto initial = farther(0,adj);
+        auto final = farther(initial.first,adj);
+
+        return final.second; 
     }
 
     int minimumDiameterAfterMerge(vector<vector<int>>& edges1, vector<vector<int>>& edges2) {
-        int n1 = (int)edges1.size() + 1;
-        int n2 = (int)edges2.size() + 1;
+        unordered_map<int,vector<int>>adj1,adj2;
+        int n1 = edges1.size();
+        int n2 = edges2.size();
+        
 
-        vector<vector<int>> adj1(n1), adj2(n2);
-        for (auto &e : edges1) {
-            adj1[e[0]].push_back(e[1]);
-            adj1[e[1]].push_back(e[0]);
+        for(auto &edge : edges1){
+            adj1[edge[0]].push_back(edge[1]);
+            adj1[edge[1]].push_back(edge[0]);
         }
-        for (auto &e : edges2) {
-            adj2[e[0]].push_back(e[1]);
-            adj2[e[1]].push_back(e[0]);
+        for(auto &edge : edges2){
+            adj2[edge[0]].push_back(edge[1]);
+            adj2[edge[1]].push_back(edge[0]);
         }
 
-        int d1 = treeDiameter(adj1);
-        int d2 = treeDiameter(adj2);
+        int d1 = findD(adj1);
+        int d2 = findD(adj2);
 
-        // Radius = ceil(d/2) = (d+1)/2 with integer math
-        int r1 = (d1 + 1) / 2;
-        int r2 = (d2 + 1) / 2;
+        int mereged = (d1+1)/2+(d2+1)/2 +1 ;
 
-        // Best possible diameter after connecting any node of T1 to any node of T2
-        int merged = r1 + r2 + 1;
+        return max({d1,d2,mereged});
 
-        return max({d1, d2, merged});
+
     }
 };
