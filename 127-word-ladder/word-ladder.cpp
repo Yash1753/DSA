@@ -1,38 +1,36 @@
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        //string to string think bfs 
-        unordered_set<string>wordBank(wordList.begin(),wordList.end());
-        if(!wordBank.count(endWord)) return 0;
-        unordered_set<string>visited;
-
+        //words ko acccess easy kri
+        unordered_set<string>seen(wordList.begin(),wordList.end());
         queue<string>q;
         q.push(beginWord);
-        visited.insert(beginWord);
-        int level = 1;
-        string check = "abcdefghijklmnopqrstuvwxyz";
+        int result = 1;
+        if(seen.find(endWord) == seen.end()) return 0;
+        seen.erase(beginWord);
+
+        
         while(!q.empty()){
             int N = q.size();
             while(N--){
-                auto top = q.front();
-                q.pop();
+                auto word = q.front();q.pop();
+                if(word == endWord) return result;
 
-                if(top == endWord) return level;
-
-                for(auto &ch : check){
-                    for(int i = 0 ; i < top.size() ; i++){
-                        string tf = top;
-                        tf[i] = ch;
-
-                        if(visited.find(tf) == visited.end() && wordBank.find(tf) != wordBank.end() ){
-                            q.push(tf);
-                            visited.insert(tf);
+                for(int i = 0 ; i <word.length() ; i++){
+                    auto orig = word;
+                    for(char ch = 'a' ; ch <= 'z' ; ch++ ){
+                        orig[i] = ch;
+                        if(seen.find(orig) != seen.end()){
+                            q.push(orig);
+                            seen.erase(orig);
                         }
                     }
                 }
 
+
             }
-            level++;
+            result++;
+
         }
 
         return 0;
