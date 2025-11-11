@@ -1,50 +1,46 @@
 class Solution {
 public:
-    vector<int> topo(unordered_map<int,vector<int>>& adj, vector<int>&indegree,int n){
-        vector<int>ans;
-        queue<int>q;
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        //labelled h toh graph hogya
+        //0>numCourses-1
+
+        //preequiste h ki b  to a directed graph h
+
+        unordered_map<int,vector<int>>adj;
+        vector<int>indegree(numCourses,0);
+        for(auto &edge : prerequisites){
+            int u = edge[0];
+            int v = edge[1];
+            indegree[u]++;
+            adj[v].push_back(u);
+        }
+        vector<int>order;
         int cnt = 0;
-        for(int i = 0 ; i < size(indegree) ; i++){
+       
+        queue<int>q;
+        for(int i = 0 ; i < numCourses ; i++){
             if(indegree[i] == 0){
                 q.push(i);
-                ans.push_back(i);
                 cnt++;
+                order.push_back(i);
             }
         }
-
+        //return order of element to basically do all courses 
+        // ek k baad doosra toh topological sort aajayega
         while(!q.empty()){
-            auto u = q.front();
+            auto node = q.front();
             q.pop();
 
-            for(int &v : adj[u]){
+            for(auto &v : adj[node]){
                 indegree[v]--;
-                if(indegree[v] == 0){
-                    q.push(v);
-                    ans.push_back(v);
-                    cnt++;
+                if(indegree[v] == 0) {q.push(v);
+                cnt++;
+                order.push_back(v);
                 }
             }
         }
-
-        if(cnt == n) return ans;
+        if(cnt == numCourses) return order;
         return {};
 
-        
-    }
-
-
-    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        unordered_map<int,vector<int>> adj;
-        vector<int>indegree(numCourses,0);
-
-        for(auto &N :prerequisites ){
-            int v = N[0];
-            int u = N[1];
-
-            adj[u].push_back(v);
-            indegree[v]++;
-        }
-
-        return topo(adj,indegree,numCourses);
     }
 };
