@@ -1,30 +1,27 @@
 class Solution {
 public:
     int m,n;
-    vector<vector<int>>directions{{0,1},{1,0},{-1,0},{0,-1}};
-    
-    bool isValid(int i, int j,vector<vector<char>>& grid){
-        if(i>=0 && i < m && j >=0 && j <n && grid[i][j] == '1') return true;
-        return false;
-    }
-    void dfs(int i, int j,vector<vector<char>>& grid ){
+    vector<pair<int,int>>directions{{1,0},{0,1},{-1,0},{0,-1}};
+    void dfs(int i, int j, vector<vector<char>>&grid){
         grid[i][j] = 0;
 
         for(auto &dir : directions){
-            int ni = i + dir[0];
-            int nj = j + dir[1];
+            int nx = i + dir.first;
+            int ny = j + dir.second;
 
-            if(isValid(ni,nj,grid)){
-                dfs(ni,nj,grid);
+            if(nx>=0 && nx < m && ny>=0 && ny < n && grid[nx][ny] == '1' ){
+                
+                dfs(nx,ny,grid);
             }
         }
     }
 
-
     int numIslands(vector<vector<char>>& grid) {
         m = grid.size();
         n = grid[0].size();
+
         int cnt = 0;
+
         for(int i = 0 ; i < m ; i++){
             for(int j = 0 ; j < n ; j++){
                 if(grid[i][j] == '1'){
