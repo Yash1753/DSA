@@ -10,13 +10,15 @@ public:
         }
 
         unordered_map<int,int>mpp;
-        mpp[0] = -1;
+        //mpp[0] = -1;
 
         int sum = 0;
         int maxLen = INT_MIN;
         for(int i = 0 ; i < n ; i++){
             sum+=nums[i];
-            
+            if(sum == 0){
+                maxLen = max(maxLen,i+1);
+            }
             if(mpp.find(sum) != mpp.end()){
                 int currLen = i - mpp[sum] ;
                 maxLen = max(currLen,maxLen);
