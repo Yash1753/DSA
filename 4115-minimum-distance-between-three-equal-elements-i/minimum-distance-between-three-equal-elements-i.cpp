@@ -1,34 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 class Solution {
 public:
-    int solve(vector<int>num){
-        int n = num.size();
-        //sort(num.begin(),num.end());
-
-        int temp = INT_MAX;
-        for(int i = 2 ; i < n ; i++){
-            int a = 2*(num[i] - num[i-2]);
-            temp = min(temp,a);
-        }
-        return temp;
-    }
-
     int minimumDistance(vector<int>& nums) {
         int n = nums.size();
-        if(n < 3) return -1;
+        if (n < 3) return -1;
 
-        unordered_map<int,vector<int>>mp;
+        unordered_map<int, vector<int>> mp;
+        mp.reserve(n*2);
 
-       for(int i = 0 ; i < n ; i++){
-            mp[nums[i]].push_back(i);
-       }
+        for (int i = 0; i < n; ++i) mp[nums[i]].push_back(i);
 
-        int maxi = INT_MAX;
-       for(auto &it : mp){
-        if(it.second.size() >= 3){
-            int dis = solve(it.second);
-            maxi = min(maxi,dis);
+        int best = INT_MAX;
+        for (auto &p : mp) {
+            const vector<int>& v = p.second;
+            if (v.size() < 3) continue;
+            // v is already in increasing order of indices
+            for (size_t i = 2; i < v.size(); ++i) {
+                int cur = 2 * (v[i] - v[i-2]);
+                if (cur < best) best = cur;
+            }
         }
-       }
-       return maxi == INT_MAX?-1:maxi;
+
+        return (best == INT_MAX) ? -1 : best;
     }
 };
