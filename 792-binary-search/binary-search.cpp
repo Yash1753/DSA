@@ -1,8 +1,8 @@
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        auto L = lower_bound(nums.begin(), nums.end(),target) - nums.begin();
-
-        return L == nums.size() || nums[L] != target ? -1 : L;
+        auto ans = lower_bound(nums.begin(),nums.end(),target);
+        if(ans == nums.end() || nums[ans-nums.begin()] != target ) return -1;
+        return ans-nums.begin();
     }
 };
