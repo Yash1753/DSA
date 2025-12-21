@@ -1,39 +1,42 @@
 class Solution {
 public:
-    bool helper(vector<int>& piles, int h, int k){
-        int n = piles.size();
-        int time = 0;
-        
-        for(int i = 0 ;i < n ;i++){
-            time += ceil((double)piles[i]/(double)k);
-            if(time > h) return false;
+
+    bool fn(int mid, vector<int>& piles, int h){
+        bool canEat = false;
+
+        int timetoEat = 0;
+
+        for(int i = 0; i < piles.size();i++){
+            timetoEat += ceil((double)piles[i]/(double)mid);
         }
 
-        
-        return true;
+        canEat = timetoEat <= h;
+
+        return canEat;
     }
 
     int minEatingSpeed(vector<int>& piles, int h) {
         int n = piles.size();
-        //guard h hours m shift maarege 
-        //speped - >k
-        //agar ok se less than banan she eat all and will not more that hopur 
-        //k chaiye
+        //h hours k time h ji
+        //k hme find krna h minimum ki vo sb kaha jaye
+        //1 hr m ek slot hi kaha skti
 
-        int s = 1;
-        int e= *max_element(piles.begin(),piles.end());
-        int ans = 0;
-        while(s<e){
-            int mid = s + (e-s)/2;
-            if(helper(piles,h,mid)){
+        //range lelo
+
+        int low = 1;
+        int high = *max_element(piles.begin(),piles.end());
+        int ans = INT_MAX;
+
+        while(low <high){
+            int mid = low + (high-low)/2;
+
+            if(fn(mid,piles,h)){
                 ans = mid;
-                e = mid;
+                high = mid;
             }else{
-                s = mid+1;
+                low = mid+1;
             }
-
         }
-        return s;
-        
+        return low;
     }
 };
