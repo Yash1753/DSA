@@ -8,7 +8,8 @@ public:
             int number = num[j] - '0';
             if(number%2){
                 ans = num.substr(0,j+1);
-                break;
+                return ans;
+                //break;
             }
             j--;
         }
