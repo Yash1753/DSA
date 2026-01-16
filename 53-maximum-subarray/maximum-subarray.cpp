@@ -4,7 +4,7 @@ public:
         int maxi = INT_MIN;
         int curr = 0;
 
-        for(auto it : nums){
+        for(auto &it : nums){
             curr = max(curr+it, it);
             maxi = max(maxi,curr);
         }
