@@ -1,24 +1,21 @@
 class Solution {
 public:
-    int helper( vector<vector<int>>&dp, int i, int j){
-        if(i == 0 && j == 0) return 1;
-        if(i<0 || j <0) return 0;
-
+int M;int N;
+    int dp[101][101];
+    int helper(int i, int j){
+        if(i >= M || j >=N) return 0;
+        if( i == M-1 && j == N-1) return 1;
         if(dp[i][j] != -1) return dp[i][j];
+        int bottom =  helper(i+1,j);
+        int right =  helper(i,j+1);
 
-        int up = helper(dp,i-1,j);
-        int right = helper(dp,i,j-1);
-
-        dp[i][j] = up+ right;
-
-        return up + right;
-
-
+        return dp[i][j] = bottom+right;
     }
 
     int uniquePaths(int m, int n) {
-         vector<vector<int>> dp(m, vector<int> (n, -1));
-         return helper(dp,m-1,n-1);
-
+        M=m;
+        N=n;
+        memset(dp,-1,sizeof(dp));
+        return helper(0,0);
     }
 };
