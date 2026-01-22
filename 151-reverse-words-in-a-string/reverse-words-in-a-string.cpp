@@ -1,15 +1,39 @@
 class Solution {
 public:
     string reverseWords(string s) {
-        stringstream ss(s);
-        string token = "";
-        string res = "";
+        vector<string>word;
 
-        while(ss >> token){
-            res = token + " " + res;
+        while(!s.empty() && s.back() == ' ') s.pop_back();
+        int i = 0 , j = 0 ;
+        int n  = s.length();
+        while(s[i] == ' '){
+            i++;
+            j++;
         }
 
-        res.pop_back();
-        return res;
+        while(j < n){
+            if(s[j] == ' '){
+                if(i < j){
+                    word.push_back(s.substr(i,j-i));
+                }
+                j++;
+                i = j;
+            }else{
+                j++;
+            }
+        }
+        if(i < j){
+                    word.push_back(s.substr(i,j-i));
+                }
+
+        reverse(word.begin(),word.end());
+        string ans = "";
+
+        for(auto &it : word){
+            ans += it;
+            ans += " ";
+        }
+        ans.pop_back();
+        return ans;
     }
 };
