@@ -1,24 +1,23 @@
 class Solution {
 public:
     int lastStoneWeight(vector<int>& stones) {
-        //maxheap leke upar k 2 element use krte
-        priority_queue<int>pq;
+        int n = stones.size();
 
-        for(auto it : stones){
-            pq.push(it);
-        }
+        priority_queue<int>pq;
+        for(auto it : stones) pq.push(it);
+
         while(pq.size() > 1){
             auto top = pq.top();
             pq.pop();
 
-            auto sTop = pq.top();
+            auto second = pq.top();
             pq.pop();
 
-            if(top-sTop != 0){
-                pq.push(top-sTop);
+            if(top-second > 0){
+                pq.push(top-second);
             }
         }
-        if(!pq.size()) return 0;
+        if(pq.empty()) return 0;
         return pq.top();
     }
 };
