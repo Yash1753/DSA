@@ -5,9 +5,9 @@ public:
         int neg = 0;
         for(auto &it : s){
             if(it == '('){
-                if(cnt < 0)cnt--;
-                else cnt++;
-
+                // if(cnt < 0)cnt--;
+                // else cnt++;
+                cnt++;
             }
             else{
                 if(cnt <=0) neg++;
