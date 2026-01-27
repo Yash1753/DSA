@@ -9,58 +9,62 @@
  */
 class Solution {
 public:
-    void populate(TreeNode* root,unordered_map<int,vector<int>>&adj, int parent ){
+    unordered_map<TreeNode*,TreeNode*>mpp;
+    void mapp(TreeNode *root){
         if(!root) return;
 
-        if(parent != -1) adj[root->val].push_back(parent);
-        if(root->left){
-            adj[root->val].push_back(root->left->val);
-        }
-        if(root->right){
-            adj[root->val].push_back(root->right->val);
-        }
+        if(root->left) mpp[root->left] = root;
+        mapp(root->left);
 
-        if(root->left)populate(root->left, adj ,root->val);
-        if(root->right)populate(root->right, adj ,root->val);
-
-    }
-
-    void dfs(unordered_map<int,vector<int>>&adj,int target, int k, vector<int>&ans, vector<int>&v,int cnt){
-        v[target] = 1;
-
-        if(cnt == k){
-            ans.push_back(target);
-            return;
-        }
-
-        for(auto &node: adj[target]){
-            if(v[node] == -1){
-                v[node] = 1;
-                
-                dfs(adj,node,k,ans,v,cnt+1);
-
-            }
-        }
-
-        
-
+        if(root->right) mpp[root->right] = root;
+        mapp(root->right);
     }
 
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<int,vector<int>>adj;
-        if(!root) return {};
-        vector<int>ans;
-        populate(root,adj,-1);
-       /*  for(auto it : adj){
-            for(auto i : it.second){
-                cout << it.first << "->" << i << " ";
-            }
-            cout << endl;
-        } */
+        //map the parent and find ans
+        mapp(root);
 
-        //populate hoigya shi
-        vector<int>visited(501,-1);
-        dfs(adj,target->val,k,ans,visited,0);
-        return ans;
+        //it is mapped
+        //make a queue
+
+        queue<TreeNode*>q;
+        unordered_set<int>st;
+        q.push(target);
+        st.insert(target->val);
+
+        while(!q.empty()){
+            int n = q.size();
+            if(k == 0) break;
+            
+            while(n--){
+                auto top = q.front();
+                q.pop();
+
+                if(top->left && st.find(top->left->val) == st.end()){
+                    q.push(top->left);
+                    st.insert(top->left->val);
+                }
+
+                if(top->right && st.find(top->right->val) == st.end()){
+                    q.push(top->right);
+                    st.insert(top->right->val);
+                }
+
+                //do for parent as well
+
+                if(mpp.count(top) && st.find(mpp[top]->val) == st.end()){
+                    q.push(mpp[top]);
+                    st.insert(mpp[top]->val);
+                }
+            }
+            k--;
+        }
+
+        vector<int>res;
+        while(!q.empty()){
+            auto top = q.front();q.pop();
+            res.push_back(top->val);
+        }
+        return res;
     }
 };
